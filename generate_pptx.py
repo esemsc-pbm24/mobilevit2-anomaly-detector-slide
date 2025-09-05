@@ -1,3 +1,15 @@
+import sys
+import collections
+# Compatibility shim for Python 3.10+ where ABCs moved to collections.abc
+try:
+    import collections.abc as _cabc
+    for _name in ("Mapping", "MutableMapping", "Sequence", "Container"):
+        if not hasattr(collections, _name) and hasattr(_cabc, _name):
+            setattr(collections, _name, getattr(_cabc, _name))
+except Exception:
+    # Best-effort; if it fails, python-pptx import may still work on older Pythons
+    pass
+
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from pptx.enum.text import PP_ALIGN
@@ -200,6 +212,7 @@ def main():
     out_name = "MobileViT2-Anomaly-Detector-Key-Insights.pptx"
     prs.save(out_name)
     print(f"Saved: {out_name}")
+
 
 if __name__ == "__main__":
     main()
