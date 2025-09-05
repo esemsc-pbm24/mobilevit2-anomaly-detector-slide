@@ -1,0 +1,26 @@
+name: Build PPTX
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Generate PPTX
+        run: python generate_pptx.py
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MobileViT2-Anomaly-Detector-Key-Insights
+          path: MobileViT2-Anomaly-Detector-Key-Insights.pptx
+          if-no-files-found: error
